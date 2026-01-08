@@ -32,11 +32,13 @@ func collectMarkdownFiles(fsys FS, contentRoot string) ([]string, error) {
 		if strings.EqualFold(filepath.Ext(d.Name()), ".md") {
 			files = append(files, p)
 		}
+
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
+
 	return files, nil
 }
 

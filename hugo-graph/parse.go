@@ -63,6 +63,7 @@ func extractDisplayTitle(md string, fallback string) string {
 			return v
 		}
 	}
+
 	return fallback
 }
 

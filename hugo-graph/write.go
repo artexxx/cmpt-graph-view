@@ -28,6 +28,7 @@ func buildIndex(links []Link) Index {
 		linkMap[l.Source] = append(linkMap[l.Source], l)
 		backMap[l.Target] = append(backMap[l.Target], l)
 	}
+
 	return Index{Links: linkMap, Backlinks: backMap}
 }
 
