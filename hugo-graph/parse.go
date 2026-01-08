@@ -82,7 +82,6 @@ func extractLinks(md string, sourceURL string, pageMap map[string]string) []Link
 
 	links := make([]Link, 0, 16)
 
-	// 1) Reference definitions: [label]: ...relref...
 	refdefs := map[string]string{} // lower(label) -> target
 	refMatches := reRefDefLine.FindAllStringSubmatch(mdClean, -1)
 	for _, m := range refMatches {
@@ -105,7 +104,6 @@ func extractLinks(md string, sourceURL string, pageMap map[string]string) []Link
 		}
 	}
 
-	// 2) Inline relref anywhere
 	relrefs := reRelrefAny.FindAllStringSubmatch(mdClean, -1)
 	for _, m := range relrefs {
 		if len(m) != 3 {
@@ -117,7 +115,6 @@ func extractLinks(md string, sourceURL string, pageMap map[string]string) []Link
 		}
 	}
 
-	// 3) Markdown links [Text](url)
 	mdLinks := reMDLink.FindAllStringSubmatch(mdClean, -1)
 	for _, m := range mdLinks {
 		if len(m) != 3 {
@@ -130,12 +127,10 @@ func extractLinks(md string, sourceURL string, pageMap map[string]string) []Link
 		}
 	}
 
-	// 4) Reference usages [label] -> resolve via (1)
 	if len(refdefs) > 0 {
 		links = append(links, extractReferenceUsages(mdClean, sourceURL, refdefs)...)
 	}
 
-	// canonicalize
 	for i := range links {
 		links[i].Source = canonicalPath(links[i].Source)
 		links[i].Target = canonicalPath(links[i].Target)
@@ -145,10 +140,8 @@ func extractLinks(md string, sourceURL string, pageMap map[string]string) []Link
 }
 
 func extractReferenceUsages(md string, sourceURL string, refdefs map[string]string) []Link {
-	// Go regexp does not support lookbehind; do a simple bracket scan with filtering.
 	out := make([]Link, 0, 8)
 
-	// Find all "[...]" occurrences (non-greedy).
 	re := regexp.MustCompile(`\[[^\]\r\n]+\]`)
 	locs := re.FindAllStringIndex(md, -1)
 	for _, loc := range locs {
@@ -156,12 +149,10 @@ func extractReferenceUsages(md string, sourceURL string, refdefs map[string]stri
 			continue
 		}
 		start, end := loc[0], loc[1]
-		// Exclude images: ![alt]
 		if start > 0 && md[start-1] == '!' {
 			continue
 		}
 
-		// Exclude reference definitions: [label]: ...
 		after := md[end:]
 		after = strings.TrimLeft(after, " \t")
 		if strings.HasPrefix(after, ":") {

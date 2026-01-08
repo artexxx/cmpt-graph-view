@@ -1,4 +1,4 @@
-# cmpt-graph-view Linkmap Generator
+# Linkmap Generator
 
 This tool scans Hugo Markdown content and produces a **full internal link graph** as JSON.
 
@@ -55,24 +55,44 @@ Front matter is parsed from YAML (`---`) or TOML (`+++`) and the display title i
 
 `title` → `linkTitle` → `shortTitle` → `path`
 
-## Usage
+# GitHub Action
 
-From the repository root:
+You can run the generator in CI (Docker-based) similarly to “Obsidian Link Scraper”.
 
-```bash
-cd hugo-graph
-go run . -input ../content -output ../data/linkmap.json -pretty
+## Example workflow step
+
+Add a build step in your workflow (e.g. `.github/workflows/deploy.yml`):
+
+```yaml
+- name: Build Linkmap JSON
+  uses: ./Themes/cpmt-graph-view/hugo-graph
+  with:
+    input: content
+    output: data/linkmap.json
+    pretty: "true"
 ```
 
+### Notes
 
-Or build a binary:
+* This assumes your action is committed in-repo (local action usage).
+* If you publish the generator as a separate action repository later, replace `uses:` with that repo ref.
+
+---
+
+# Typical project flow
+
+Locally:
 
 ```bash
-cd hugo-graph
-go build -o linkmap-gen .
-./linkmap-gen -input ../content -output ../data/linkmap.json
+# Installation
+go install github.com/Artexxx/cmpt-graph-view/hugo-graph@latest
+
+# Run
+hugo-graph -input=content -output=data/linkmap.json -pretty
 ```
 
-## GitHub Action
+CI:
 
-You can run the generator in CI using the included `action.yml` (Docker-based).
+1. Checkout
+2. Run generator
+3. Build Hugo site (now `data/linkmap.json` exists)

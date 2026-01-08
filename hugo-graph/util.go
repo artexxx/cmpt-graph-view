@@ -25,9 +25,7 @@ var (
 
 	reFenceBackticks = regexp.MustCompile("(?s)```.*?```")
 	reFenceTildes    = regexp.MustCompile(`(?s)~~~.*?~~~`)
-
-	// Remove base URL: https://example.com/foo -> /foo
-	reStripHost = regexp.MustCompile(`(?i)^https?://[^/]+`)
+	reStripHost      = regexp.MustCompile(`(?i)^https?://[^/]+`)
 )
 
 func stripCodeFences(md string) string {
@@ -47,7 +45,6 @@ func canonicalPath(p string) string {
 		return "/"
 	}
 
-	// strip host if present
 	p = reStripHost.ReplaceAllString(p, "")
 
 	// drop query/fragment
@@ -89,6 +86,7 @@ func canonicalPath(p string) string {
 	if p == "" {
 		return "/"
 	}
+
 	return p
 }
 
@@ -241,6 +239,7 @@ func resolveTarget(rawURL string, sourceURL string, pageMap map[string]string) (
 	if v, ok := pageMap[key]; ok {
 		return v, true
 	}
+
 	return key, true
 }
 
