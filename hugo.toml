@@ -1,0 +1,36 @@
+[params.graphView]
+# Master switch: enables/disables the component (inject + JS boot).
+enable = true
+# Enables console logs from the component JS.
+debug = false
+# Disable graph behavior on mobile/touch-like devices.
+# If viewport width <= mobileBp OR (hover:none) OR (pointer:coarse) => disabled.
+mobileBp = 900
+# D3 zoom limits (mouse wheel over graph).
+zoomMin = 0.25
+zoomMax = 6.0
+# Wheel sensitivity for zoom
+zoomWheel = 0.002
+# Clamp padding for node positions inside the canvas (prevents flying out of bounds).
+pad = 14
+# Physics tuning for the small (1-hop) graph.
+oneHopLinkDist = 110   # link distance (higher => more spread)
+oneHopCharge   = -260  # repulsion strength (more negative => more spread)
+oneHopPull     = 0.06  # pull to center via forceX/forceY (higher => tighter)
+oneHopCollideR = 22    # collision radius (higher => fewer overlaps)
+# Physics tuning for the full graph (dialog).
+fullLinkDist = 72
+fullCharge   = -170
+fullPull     = 0.10
+fullCollideR = 14
+# Whether to render node labels in the full graph (can be heavy on big graphs).
+showLabelsInFull = false
+
+# Optional UI strings used in the HTML partial (if you wired them there).
+# title = "Graph View"
+# fullTitle = "Full graph"
+# backlinksTitle = "Backlinks"
+
+# Optional sizing used by HTML data-attrs (if you wired them there).
+# height = 400
+# fullHeight = 720

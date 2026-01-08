@@ -1,0 +1,25 @@
+name: cmpt-graph-view linkmap generator
+description: Generate a full internal link graph (linkmap.json) from Hugo content.
+branding:
+  icon: share-2
+  color: gray-dark
+inputs:
+  input:
+    description: Input content directory
+    required: false
+    default: content
+  output:
+    description: Output JSON file
+    required: false
+    default: data/linkmap.json
+  pretty:
+    description: Pretty JSON output (indent=2)
+    required: false
+    default: "false"
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - "-input=${{ inputs.input }}"
+    - "-output=${{ inputs.output }}"
+    - "-pretty=${{ inputs.pretty }}"

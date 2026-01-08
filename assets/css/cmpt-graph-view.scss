@@ -1,0 +1,200 @@
+@import "_variables";
+
+.gv {
+  --gv-height: 400px;
+  --gv-full-height: 720px;
+  --gv-border: #{$global-border-color};
+  --gv-border-soft: #{rgba($global-border-color, .5)};
+  --gv-dialog-bg: #{$global-background-color};
+  --gv-dialog-backdrop: rgba(0, 0, 0, .45);
+  --gv-text: #{$global-font-color};
+  --gv-node: #{rgba($single-link-color, .85)};
+  --gv-node-active: #{$single-link-hover-color};
+  --gv-link: #{rgba($global-font-secondary-color, .4)};
+  --gv-link-active: #{rgba($single-link-color, .8)};
+
+  &.gv--dark {
+    --gv-border: #{$global-border-color-dark};
+    --gv-border-soft: #{rgba($global-border-color-dark, .5)};
+    --gv-dialog-bg: #{$global-background-color-dark};
+    --gv-dialog-backdrop: rgba(0, 0, 0, .6);
+    --gv-text: #{$global-font-color-dark};
+    --gv-node: #{rgba($single-link-color-dark, .85)};
+    --gv-node-active: #{$single-link-hover-color-dark};
+    --gv-link: #{rgba($global-font-secondary-color-dark, .3)};
+    --gv-link-active: #{rgba($single-link-color-dark, .8)};
+  }
+
+  .gv__summary {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .gv__summary-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .85;
+
+    svg {
+      display: block;
+      width: 1.1em;
+      height: 1.1em;
+    }
+  }
+
+  .gv__summary-title, .backlinks {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .gv__summary-title::before {
+    content: '|';
+    font-weight: bolder;
+    margin-right: 0.5em;
+    position: relative;
+    bottom: 2px;
+    color: var(--gv-border);
+
+    [data-theme='dark'] & {
+      color: var(--gv-border);
+    }
+  }
+
+  .gv__canvas-wrap {
+    position: relative;
+    border: 1px solid var(--gv-border);
+  }
+
+  .gv__canvas {
+    width: 100%;
+    height: var(--gv-height);
+  }
+
+  .gv__canvas--full {
+    height: var(--gv-full-height);
+  }
+
+  .gv__tools {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .gv__tool {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--gv-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    opacity: .85;
+    transition: background-color 0.2s, border-color 0.2s;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    &:hover {
+      opacity: 1;
+      background-color: var(--gv-border-soft);
+    }
+    &[aria-pressed="true"] {
+      opacity: 1;
+      background-color: var(--gv-border);
+    }
+  }
+
+  .gv__backlinks {
+    margin-top: .75rem;
+
+    ul {
+      margin: 0 0 0 1.25rem;
+      padding: 0;
+    }
+
+    li {
+      margin: .25rem 0;
+    }
+  }
+  .gv__backlinks {
+    padding-bottom: 1rem;
+
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin: 0.75rem 0;
+      line-height: 1.5;
+    }
+  }
+
+
+  .gv__dialog {
+    width: 1100px;
+    height: 760px;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid var(--gv-border);
+    border-radius: 14px;
+    padding: 0;
+    background: var(--gv-dialog-bg);
+    color: inherit;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
+    &::backdrop {
+      background: var(--gv-dialog-backdrop);
+    }
+  }
+
+  .gv__dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem .9rem;
+    border-bottom: 1px solid var(--gv-border-soft);
+  }
+
+  .gv__dialog-title {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .gv__dialog-close {
+    width: 34px;
+    height: 34px;
+    border-radius: 100%;
+    border: 1px solid var(--gv-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: var(--gv-border-soft);
+    }
+  }
+
+  .gv__dialog-body {
+    padding: .75rem;
+    height: calc(100% - 54px);
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,44 @@
+{{- $params := partial "function/params.html" -}}
+{{- $gv := $params.graphView -}}
+
+{{- with site.Data.linkmap -}}
+    <script id="gv-linkmap-json" type="application/json">{{ . | jsonify }}</script>
+{{- end -}}
+
+{{- $styleOpts := dict "targetPath" "css/cmpt-graph-view.css" "minify" hugo.IsProduction -}}
+{{- if not hugo.IsProduction -}}
+    {{- $styleOpts = dict "sourceMap" "inline" | merge $styleOpts -}}
+{{- end -}}
+{{- $css := resources.Get "css/cmpt-graph-view.scss" | css.Sass $styleOpts | fingerprint -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+{{- $d3 := resources.Get "js/d3.js" | fingerprint -}}
+<script src="{{ $d3.RelPermalink }}" integrity="{{ $d3.Data.Integrity }}" defer></script>
+
+{{- $jsOpts := dict "targetPath" "js/cmpt-graph-view.js" "minify" hugo.IsProduction -}}
+{{- if not hugo.IsProduction -}}
+    {{- $jsOpts = dict "sourceMap" "inline" | merge $jsOpts -}}
+{{- end -}}
+
+{{- $jsOpts = dict "params" (dict
+        "enable" ($gv.enable | default true)
+        "debug" ($gv.debug | default false)
+        "mobileBp" ($gv.mobileBp | default 900)
+        "zoomMin" ($gv.zoomMin | default 0.25)
+        "zoomMax" ($gv.zoomMax | default 6)
+        "zoomWheel" ($gv.zoomWheel | default 0.002)
+        "pad" ($gv.pad | default 14)
+        "oneHopLinkDist" ($gv.oneHopLinkDist | default 110)
+        "oneHopCharge" ($gv.oneHopCharge | default -260)
+        "oneHopPull" ($gv.oneHopPull | default 0.06)
+        "oneHopCollideR" ($gv.oneHopCollideR | default 22)
+        "fullLinkDist" ($gv.fullLinkDist | default 72)
+        "fullCharge" ($gv.fullCharge | default -170)
+        "fullPull" ($gv.fullPull | default 0.10)
+        "fullCollideR" ($gv.fullCollideR | default 14)
+        "showLabelsInFull" ($gv.showLabelsInFull | default false)
+        ) | merge $jsOpts -}}
+
+{{- $js := resources.Get "js/cmpt-graph-view.js" | js.Build $jsOpts | fingerprint -}}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+

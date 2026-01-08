@@ -1,0 +1,56 @@
+{{- $params := partial "function/params.html" -}}
+{{- $gv := $params.graphView -}}
+
+{{- $slug := .File.UniqueID | default (replace (trim .RelPermalink "/") "/" "-") -}}
+{{- $graphIcon := (resources.Get "icons/global-graph-icon.svg").Content | safeHTML -}}
+{{- $backIcon := (resources.Get "icons/global-backlinks-icon.svg").Content | safeHTML -}}
+
+<div class="details gv gv--open open"
+     data-gv
+     data-gv-id="{{ $slug }}"
+     data-gv-height="{{ $gv.height | default 400 }}"
+     data-gv-full-height="{{ $gv.fullHeight | default 720 }}"
+     data-gv-show-labels-full="{{ cond ($gv.showLabelsInFull | default false) "1" "0" }}">
+
+    <div class="details-summary gv__summary">
+        <h2 class="gv__summary-title">{{ $gv.title | default "Graph View" }}
+            {{- dict "Class" "details-icon fa-solid fa-angle-right fa-fw" | partial "plugin/icon.html" -}}
+        </h2>
+    </div>
+
+    <div class="details-content gv__content">
+        <div class="gv__canvas-wrap">
+            <div class="gv__canvas" id="gv-canvas-{{ $slug }}"></div>
+
+            <div class="gv__tools" aria-label="Graph tools">
+                <button class="gv__tool gv__tool--backlinks"
+                        type="button"
+                        data-gv-action="backlinks"
+                        aria-pressed="false"
+                        aria-controls="gv-backlinks-{{ $slug }}"
+                        title="{{ $gv.backlinksTitle | default "Backlinks" }}">
+                    {{ $backIcon }}
+                </button>
+
+                <button class="gv__tool gv__tool--full"
+                        type="button"
+                        data-gv-action="full"
+                        title="{{ $gv.fullTitle | default "Full graph" }}">
+                    {{ $graphIcon }}
+                </button>
+            </div>
+        </div>
+
+        <div class="gv__backlinks" id="gv-backlinks-{{ $slug }}" hidden></div>
+
+        <dialog class="gv__dialog" id="gv-dialog-{{ $slug }}" aria-label="{{ $gv.fullTitle | default "Full graph" }}">
+            <div class="gv__dialog-head">
+                <div class="gv__dialog-title">{{ $gv.title | default "Graph View" }}</div>
+                <button class="gv__dialog-close" type="button" data-gv-action="close" aria-label="Close">×</button>
+            </div>
+            <div class="gv__dialog-body">
+                <div class="gv__canvas gv__canvas--full" id="gv-canvas-full-{{ $slug }}"></div>
+            </div>
+        </dialog>
+    </div>
+</div>
